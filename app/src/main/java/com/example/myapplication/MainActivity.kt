@@ -1,34 +1,27 @@
 package com.example.myapplication
 
-import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
-import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
-import com.example.myapplication.databinding.ActivityMainBinding
-import android.view.Menu
-import android.view.MenuItem
-import okhttp3.*
-import java.io.IOException
-import android.util.Log
-import android.widget.TextView
-import com.google.android.material.textfield.TextInputEditText
-import org.json.JSONObject
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import java.text.SimpleDateFormat
-import java.util.*
-import android.os.Looper
-import android.os.Handler
-import android.content.Intent
-import android.content.IntentFilter
-import android.os.BatteryManager
 import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.media.MediaPlayer
+import android.os.BatteryManager
+import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.util.Log
+import android.view.KeyEvent
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import com.example.myapplication.databinding.ActivityMainBinding
+import com.google.android.material.textfield.TextInputEditText
+import okhttp3.*
 import java.io.File
 import java.io.FileOutputStream
+import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.*
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -37,6 +30,20 @@ class MainActivity : AppCompatActivity() {
 
     private val handler = Handler(Looper.getMainLooper())
 
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        // Check if the Volume Down button is pressed
+        if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
+            // Navigate to the new activity
+            val intent = Intent(
+                this@MainActivity,
+                SecondActivity::class.java
+            )
+            startActivity(intent)
+            return true // Indicate that the event has been handled
+        }
+        return super.onKeyDown(keyCode, event) // Pass other key events to the parent
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,14 +51,10 @@ class MainActivity : AppCompatActivity() {
 
 
 
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Bind the TextView for showing the response
-        val responseTextView = findViewById<TextView>(R.id.textview_first)
-
-        // Bind the TextInputEditText
-        val inputEditText = findViewById<TextInputEditText>(R.id.textinput)
 
         val timeTextView: TextView = findViewById(R.id.time)
         val dateTextView: TextView = findViewById(R.id.date)
@@ -96,19 +99,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
         */
-
-        // Set click listener for the FloatingActionButton (FAB)
-        binding.fab.setOnClickListener {
-            // Use a hardcoded MP3 URL
-            val hardcodedMp3Url = "http://15.164.221.34:5009/audio/speech.mp3"
-
-            // Trigger the playMp3FromUrl function
-            playMp3FromUrl(hardcodedMp3Url) { errorMessage ->
-                runOnUiThread {
-                    // Display the error message in the TextView if something goes wrong
-                }
-            }
-        }
 
 
 
